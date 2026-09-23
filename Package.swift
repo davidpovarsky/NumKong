@@ -56,6 +56,10 @@ let package = Package(
         .target(
             name: "CNumKong",
             path: "include",
+            // Keep this target substantive: Xcode's SwiftPM integration
+            // otherwise expects, but never emits, CNumKong.o when the
+            // target is linked transitively (swift-package-manager#5706).
+            sources: ["cnumkong_module.c"],
             publicHeadersPath: ".",
             cSettings: [
                 .define("NK_DYNAMIC_DISPATCH", to: "1"),

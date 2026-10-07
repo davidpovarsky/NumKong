@@ -5,6 +5,7 @@ on:
     branches: ["main"]
 
 permissions:
+  actions: read
   contents: write
 
 env:
@@ -15,11 +16,27 @@ jobs:
     name: Update Version
     runs-on: ubuntu-latest
     steps:
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Checkout
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
           persist-credentials: false
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Run TinySemVer
         uses: ashvardanian/tinysemver@v2.1.1
         with:
@@ -58,10 +75,26 @@ jobs:
     needs: versioning
     runs-on: ubuntu-24.04
     steps:
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Checkout the latest code
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Perform rebase
         run: |
           git config user.name "github-actions[bot]"
@@ -69,6 +102,14 @@ jobs:
           git fetch origin main
           git checkout main-dev
           git rebase origin/main
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Push changes
         uses: CasperWA/push-protected@v2
         with:

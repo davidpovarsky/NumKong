@@ -5,6 +5,7 @@ on:
     branches: ["main", "main-*"]
 
 permissions:
+  actions: read
   contents: read
 
 jobs:
@@ -13,9 +14,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Print machine specs
         shell: bash
         run: |
@@ -25,9 +42,25 @@ jobs:
           free -h 2>/dev/null || vm_stat 2>/dev/null || systeminfo 2>/dev/null | head -20 || true
           echo "::endgroup::"
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Install Rust toolchain
         uses: moonrepo/setup-rust@v1
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Install 32-bit target and dependencies
         run: |
           rustup target add i686-unknown-linux-gnu
@@ -35,17 +68,57 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gcc-multilib g++-multilib libc6-dev-i386
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Test default build
         run: cargo test
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Test with all features
         run: cargo test --all-features
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Test no-std build (check only)
         run: cargo check --no-default-features
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Test i686 cross-compilation build
         run: cargo build --target i686-unknown-linux-gnu --all-features
 
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Test i686 cross-compilation (no-std)
         run: cargo build --target i686-unknown-linux-gnu --no-default-features

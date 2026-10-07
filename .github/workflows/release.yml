@@ -5,6 +5,7 @@ on:
     branches: ["main"]
 
 permissions:
+  actions: read
   contents: write
 
 env:
@@ -15,11 +16,27 @@ jobs:
     name: Update Version
     runs-on: ubuntu-24.04
     steps:
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Checkout
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
           persist-credentials: false
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Run TinySemVer
         uses: ashvardanian/tinysemver@v3
         with:
@@ -58,6 +75,14 @@ jobs:
     needs: versioning
     runs-on: ubuntu-24.04
     steps:
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Checkout
         uses: actions/checkout@v7
         with:
@@ -66,6 +91,14 @@ jobs:
           # which outranks the action's own `token`. Left unset, the force-push arrives as
           # `github-actions[bot]`, which holds no repository role to bypass the `main*` ruleset with.
           token: ${{ secrets.SEMANTIC_REBASE_TOKEN }}
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Perform Rebase
         run: |
           git config user.name "github-actions[bot]"
@@ -73,6 +106,14 @@ jobs:
           git fetch origin main
           git checkout main-dev
           git rebase origin/main
+      - name: Live Activity · refresh
+        uses: davidpovarsky/github-automation/live-refresh@main
+        continue-on-error: true
+        with:
+          event: refresh
+          device_id: ${{ secrets.NOTIFY_DEVICE_ID }}
+          token: ${{ secrets.NOTIFY_DEVICE_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Push Changes
         uses: CasperWA/push-protected@v2
         with:

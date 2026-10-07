@@ -18,7 +18,6 @@ on:
       - "Test Rust"
       - "Test Swift"
     types:
-      - requested
       - in_progress
       - completed
 
